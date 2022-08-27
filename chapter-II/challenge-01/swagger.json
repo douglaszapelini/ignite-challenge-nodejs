@@ -1,0 +1,342 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "API",
+        "description": "API",
+        "version": "1.0.0",
+        "contact": {
+            "email": "zapelini.douglas@gmail.com"
+        }
+    },
+    "paths": {
+        "/users": {
+            "post": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Criar um novo usuário",
+                "description": "A rota deve receber name, e email dentro do corpo da requisição para que seja possível cadastrar um usuário.",
+                "requestBody": {
+                    "required": true,
+                    "description": "Corpo da requisição",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "description": "Nome do usuário"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "description": "Email do usuário"
+                                    }
+                                },
+                                "example": {
+                                    "name": "Douglas",
+                                    "email": "zapelini.douglas@gmail.com"
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Usuário criado com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "id": {
+                                            "type": "string",
+                                            "description": "Id do usuário"
+                                        },
+                                        "name": {
+                                            "type": "string",
+                                            "description": "Nome do usuário"
+                                        },
+                                        "email": {
+                                            "type": "string",
+                                            "description": "Email do usuário"
+                                        },
+                                        "admin": {
+                                            "type": "boolean",
+                                            "description": "Se o usuário é administrador"
+                                        },
+                                        "created_at": {
+                                            "type": "string",
+                                            "description": "Data de criação do usuário"
+                                        },
+                                        "updated_at": {
+                                            "type": "string",
+                                            "description": "Data de atualização do usuário"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Erro ao criar usuário",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "description": "User already exists with email teste@teste.com"
+                                        }
+                                    },
+                                    "example": {
+                                        "message": "User already exists with email"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "get": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Listar todos os usuários",
+                "description": "A rota deve receber, pelo header da requisição, uma propriedade user_id contendo o id do usuário e retornar uma lista com todos os usuários cadastrados. O id deverá ser usado para validar se o usuário que está solicitando a listagem é um admin. O retorno da lista deve ser feito apenas se o usuário for admin.",
+                "parameters": [
+                    {
+                        "name": "user_id",
+                        "in": "header",
+                        "description": "Id do usuário",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Lista de usuários",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "id": {
+                                                "type": "string",
+                                                "description": "Id do usuário"
+                                            },
+                                            "name": {
+                                                "type": "string",
+                                                "description": "Nome do usuário"
+                                            },
+                                            "email": {
+                                                "type": "string",
+                                                "description": "Email do usuário"
+                                            },
+                                            "admin": {
+                                                "type": "boolean",
+                                                "description": "Se o usuário é administrador"
+                                            },
+                                            "created_at": {
+                                                "type": "string",
+                                                "description": "Data de criação do usuário"
+                                            },
+                                            "updated_at": {
+                                                "type": "string",
+                                                "description": "Data de atualização do usuário"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Erro ao listar usuários",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "description": "messagem do erro"
+                                        }
+                                    },
+                                    "example": {
+                                        "message": "User not found or not admin"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/users/{user_id}/admin": {
+            "patch": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Atualizar o status de administrador de um usuário",
+                "description": "A rota deve receber, nos parâmetros da rota, o id de um usuário e transformar esse usuário em admin.",
+                "parameters": [
+                    {
+                        "name": "user_id",
+                        "in": "path",
+                        "description": "Id do usuário",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Usuário atualizado com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "id": {
+                                            "type": "string",
+                                            "description": "Id do usuário"
+                                        },
+                                        "name": {
+                                            "type": "string",
+                                            "description": "Nome do usuário"
+                                        },
+                                        "email": {
+                                            "type": "string",
+                                            "description": "Email do usuário"
+                                        },
+                                        "admin": {
+                                            "type": "boolean",
+                                            "description": "Se o usuário é administrador"
+                                        },
+                                        "created_at": {
+                                            "type": "string",
+                                            "description": "Data de criação do usuário"
+                                        },
+                                        "updated_at": {
+                                            "type": "string",
+                                            "description": "Data de atualização do usuário"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Usuário não encontrado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "description": "User not found"
+                                        }
+                                    },
+                                    "example": {
+                                        "message": "User not found"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/users/{user_id}": {
+            "tags": [
+                "Users"
+            ],
+            "get": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Buscar um usuário",
+                "description": "A rota deve receber, nos parâmetros da rota, o id de um usuário e devolver as informações do usuário encontrado pelo corpo da resposta.",
+                "parameters": [
+                    {
+                        "name": "user_id",
+                        "in": "path",
+                        "description": "Id do usuário",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Usuário encontrado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "id": {
+                                                "type": "string",
+                                                "description": "Id do usuário"
+                                            },
+                                            "name": {
+                                                "type": "string",
+                                                "description": "Nome do usuário"
+                                            },
+                                            "email": {
+                                                "type": "string",
+                                                "description": "Email do usuário"
+                                            },
+                                            "admin": {
+                                                "type": "boolean",
+                                                "description": "Se o usuário é administrador"
+                                            },
+                                            "created_at": {
+                                                "type": "string",
+                                                "description": "Data de criação do usuário"
+                                            },
+                                            "updated_at": {
+                                                "type": "string",
+                                                "description": "Data de atualização do usuário"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Usuário não encontrado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "description": "User not found"
+                                        }
+                                    },
+                                    "example": {
+                                        "message": "User not found"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
